@@ -22,7 +22,7 @@ jobs:
           java-version: '11'  # Set the Java version to 11
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml  # Build the Maven project and create package
+        run: mvn clean package  # Build the Maven project and create package
 
       - name: Run JUnit tests and generate reports
         run: mvn test surefire-report:report  # Run JUnit tests and generate Surefire reports
