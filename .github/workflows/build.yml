@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'  # Set the Java version to 11
-          distribution: 'openjdk'
+          distribution: 'adopt'
 
       - name: Build with Maven
         run: mvn clean package  # Build the Maven project and create package
@@ -35,8 +35,3 @@ jobs:
           name: junit-reports
           path: target/surefire-reports  # Path to the Surefire reports directory
 
-      - name: Display JUnit test reports
-        if: always()  # Ensure this step runs even if previous steps failed
-        run: |
-          echo "JUnit Test Reports:"
-          cat target/surefire-reports/*.txt  # Display contents of all JUnit report files
