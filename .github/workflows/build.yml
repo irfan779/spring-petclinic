@@ -34,4 +34,3 @@ jobs:
         with:
           name: junit-reports
           path: target/surefire-reports  # Path to the Surefire reports directory
-
