@@ -1,5 +1,5 @@
 
-name: Java CI with Maven
+name: Java CI with Maven and Junit test
 
 on:
   push:
@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest  
 
     steps:
+      - name: Checkout code
       - uses: actions/checkout@v2 
 
       - name: Set up JDK 11
@@ -26,5 +27,18 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml  
 
-      - name: Run JUnit tests
-        run: mvn test  # Run JUnit tests using Maven
+      - name: Run JUnit tests and generate reports
+        run: mvn test surefire-report:report 
+        continue-on-error: true
+
+      - name: Upload Junit test reports
+        uses: actions/upload-artifacts@v2
+        with:
+          name: junit-reports
+          path: target/surefire-reports
+
+      - name: Display Junit test reports
+        if: always()
+        run:
+          echo "Junit Test reports:"
+          cat target/surefire-reports/*.txt
