@@ -1,44 +1,41 @@
-
-name: Java CI with Maven and Junit test
+name: Java CI with Maven and JUnit
 
 on:
   push:
     branches:
-      - main 
+      - main  # Trigger on push to the main branch
   pull_request:
     branches:
-      - main 
+      - main  # Trigger on pull requests to the main branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest  # Use the latest version of Ubuntu
 
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v2 
+        uses: actions/checkout@v2  # Checkout the repository
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
-          java-version: '11' 
-          distribution: 'adopt' 
- 
+          java-version: '11'  # Set the Java version to 11
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml  
+        run: mvn -B package --file pom.xml  # Build the Maven project and create package
 
       - name: Run JUnit tests and generate reports
-        run: mvn test surefire-report:report 
-        
+        run: mvn test surefire-report:report  # Run JUnit tests and generate Surefire reports
+        continue-on-error: true  # Continue even if tests fail to ensure reports are generated
 
-      - name: Upload Junit test reports
-        uses: actions/upload-artifacts@v2
+      - name: Upload JUnit test reports
+        uses: actions/upload-artifact@v2
         with:
           name: junit-reports
-          path: target/surefire-reports
+          path: target/surefire-reports  # Path to the Surefire reports directory
 
-      - name: Display Junit test reports
-        if: always()
-        run:
-          echo "Junit Test reports:"
-          cat target/surefire-reports/*.txt
+      - name: Display JUnit test reports
+        if: always()  # Ensure this step runs even if previous steps failed
+        run: |
+          echo "JUnit Test Reports:"
+          cat target/surefire-reports/*.txt  # Display contents of all JUnit report files
